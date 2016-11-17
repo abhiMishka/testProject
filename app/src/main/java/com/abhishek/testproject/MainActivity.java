@@ -25,7 +25,8 @@ public class MainActivity extends AppCompatActivity {
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
-        Log.i("testJson","loaded json : " +UtilFunctions.loadJSONFromAsset());
+        UtilFunctions.readStoriesFromJson(UtilFunctions.loadJSONFromAsset());
+
 
     }
 
