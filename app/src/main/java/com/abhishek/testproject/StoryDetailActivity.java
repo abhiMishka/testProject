@@ -39,9 +39,10 @@ public class StoryDetailActivity extends AppCompatActivity {
     }
 
     private void loadBackdrop() {
-        final ImageView imageView = (ImageView) findViewById(R.id.backdrop);
+        final com.flaviofaria.kenburnsview.KenBurnsView imageView =
+                (com.flaviofaria.kenburnsview.KenBurnsView) findViewById(R.id.backdrop);
         if(!story.getSi().isEmpty()) {
-            Glide.with(this).load(story.getSi()).into(imageView);
+            Glide.with(this).load(story.getSi()).centerCrop().into(imageView);
         }
     }
 

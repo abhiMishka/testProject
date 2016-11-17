@@ -7,9 +7,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.abhishek.testproject.model.Story;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -22,16 +25,17 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.MyViewHolder
     private List<Story> storiesList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, type, description;
-
+        public TextView title, description;
+        com.flaviofaria.kenburnsview.KenBurnsView thumbNailIv;
         View view;
 
         public MyViewHolder(View view) {
             super(view);
             this.view = view;
             title = (TextView) view.findViewById(R.id.title);
-            description = (TextView) view.findViewById(R.id.genre);
-            type = (TextView) view.findViewById(R.id.year);
+            description = (TextView) view.findViewById(R.id.description);
+            thumbNailIv = (com.flaviofaria.kenburnsview.KenBurnsView) view.findViewById(R.id.thumbnail);
+
         }
     }
 
@@ -57,19 +61,34 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.MyViewHolder
     public void onBindViewHolder(MyViewHolder holder, int position) {
         final Story story = storiesList.get(position);
         holder.title.setText(story.getTitle());
-        holder.description.setText(story.getId());
-        holder.type.setText(story.getType());
+        holder.description.setText(story.getDescription());
+
+        if(!story.getSi().isEmpty()) {
+            Glide.with(Global.getInstance()).load(story.getSi()).
+                    placeholder(R.drawable.ic_image_black).centerCrop().into(holder.thumbNailIv);
+        }
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Context context = view.getContext();
-                Intent intent = new Intent(context, StoryDetailActivity.class);
-                intent.putExtra(context.getString(R.string.obj),story);
-
-                context.startActivity(intent);
+                openStoryPageActivity(view, story);
             }
         });
+
+        holder.thumbNailIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openStoryPageActivity(view, story);
+            }
+        });
+    }
+
+    private void openStoryPageActivity(View view, Story story) {
+        Context context = view.getContext();
+        Intent intent = new Intent(context, StoryDetailActivity.class);
+        intent.putExtra(context.getString(R.string.obj),story);
+
+        context.startActivity(intent);
     }
 
     @Override
