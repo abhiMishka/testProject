@@ -1,10 +1,13 @@
 package com.abhishek.testproject.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by abhishekkumar on 17/11/16.
  */
 
-public class Story {
+public class Story implements Parcelable {
 
     /**
      * description : Celebrating Black Friday in this lovely black cut out romper and floral accessories. I love black and i think it is the easiest thing to wear when i am in doubt. So a black romper solves my dilemma of what to wear when i am short of time to decide and outfit. When you wear black add some fun accessories to keep the outfit fun and lively.
@@ -31,6 +34,27 @@ public class Story {
     private boolean like_flag;
     private int likes_count;
     private int comment_count;
+
+    public Story(Parcel in) {
+        id = in.readString();
+
+        description = in.readString();
+       verb = in.readString();
+    db  =in.readString();
+       url = in.readString();
+      si = in.readString();
+      type = in.readString();
+       title = in.readString();
+       likes_count = in.readInt();
+      comment_count = in.readInt();
+
+        like_flag = in.readByte() != 0;
+
+    }
+
+    public Story() {
+
+    }
 
     public String getDescription() {
         return description;
@@ -136,4 +160,38 @@ public class Story {
                 ", comment_count=" + comment_count +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(description);
+        parcel.writeString(id);
+        parcel.writeString(verb);
+        parcel.writeString(db);
+        parcel.writeString(url);
+        parcel.writeString(si);
+        parcel.writeString(type);
+        parcel.writeString(title);
+        parcel.writeInt(likes_count);
+        parcel.writeInt(comment_count);
+
+        parcel.writeByte((byte) (like_flag ? 1 : 0));
+
+    }
+
+    public static final Creator<Story> CREATOR = new Creator<Story>() {
+        @Override
+        public Story createFromParcel(Parcel in) {
+            return new Story(in);
+        }
+
+        @Override
+        public Story[] newArray(int size) {
+            return new Story[size];
+        }
+    };
 }

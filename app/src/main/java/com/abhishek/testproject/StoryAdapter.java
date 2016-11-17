@@ -1,5 +1,7 @@
 package com.abhishek.testproject;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Movie;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,8 +24,11 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.MyViewHolder
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView title, type, description;
 
+        View view;
+
         public MyViewHolder(View view) {
             super(view);
+            this.view = view;
             title = (TextView) view.findViewById(R.id.title);
             description = (TextView) view.findViewById(R.id.genre);
             type = (TextView) view.findViewById(R.id.year);
@@ -50,10 +55,21 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Story story = storiesList.get(position);
+        final Story story = storiesList.get(position);
         holder.title.setText(story.getTitle());
         holder.description.setText(story.getId());
         holder.type.setText(story.getType());
+
+        holder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Context context = view.getContext();
+                Intent intent = new Intent(context, StoryDetailActivity.class);
+                intent.putExtra(context.getString(R.string.obj),story);
+
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

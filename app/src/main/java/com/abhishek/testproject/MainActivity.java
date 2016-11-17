@@ -11,9 +11,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.abhishek.testproject.model.Story;
 
@@ -46,8 +48,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         fetchAndFillStoryData();
-
-
 
     }
 
