@@ -111,4 +111,33 @@ public class UtilFunctions {
         return storyMap;
 
     }
+
+    public static List<Story> readStoriesListFromJson(String json) {
+
+        List<Story> storyList = new ArrayList<>();
+        Gson gson = new Gson();
+
+
+        try {
+            JSONArray reader = new JSONArray(json);
+
+            int length = reader.length();
+
+            for (int i = 2; i < length; i++) {
+                JSONObject obj = reader.getJSONObject(i);
+                Story story = gson.fromJson(obj.toString(), Story.class);
+                storyList.add(story);
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.i("testParsing", "storyLIst :  " + storyList.toString()+"\n");
+
+
+        return storyList;
+
+    }
 }
