@@ -60,7 +60,12 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         final Story story = storiesList.get(position);
-        holder.title.setText(story.getTitle());
+
+        String title = story.getTitle();
+        if(story.isLike_flag()){
+            title = title +" (You like this!)";
+        }
+        holder.title.setText(title);
         holder.description.setText(story.getDescription());
 
         if(!story.getSi().isEmpty()) {

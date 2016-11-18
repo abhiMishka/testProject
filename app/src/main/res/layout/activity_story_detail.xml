@@ -57,6 +57,26 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/followFab"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_anchor="@id/appbar"
+        app:layout_anchorGravity="bottom|right|end"
+        android:src="@drawable/ic_star_border_white"
+        android:layout_margin="@dimen/fab_margin"
+        android:clickable="true"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/likeFab"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_anchor="@id/appbar"
+        app:layout_anchorGravity="bottom"
+        android:src="@drawable/ic_like"
+        android:layout_margin="@dimen/fab_margin"
+        android:clickable="true"/>
+
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -79,12 +99,20 @@
                     android:layout_height="wrap_content">
 
                     <TextView
+                        android:id="@+id/storyCreator"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Info"
+                        android:text="Story by - "
                         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                     <TextView
+                        android:id="@+id/userNameTv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/test_string" />
+
+                    <TextView
+                        android:id="@+id/userHandleTv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/test_string" />
@@ -108,10 +136,11 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Friends"
+                        android:text="@string/description"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                     <TextView
+                        android:id="@+id/articleDescriptionTv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/test_string" />
@@ -150,14 +179,5 @@
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
-
-    <android.support.design.widget.FloatingActionButton
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        app:layout_anchor="@id/appbar"
-        app:layout_anchorGravity="bottom|right|end"
-        android:src="@drawable/ic_star_rate_white"
-        android:layout_margin="@dimen/fab_margin"
-        android:clickable="true"/>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -1,12 +1,14 @@
 package com.abhishek.testproject;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.abhishek.testproject.model.Story;
 import com.abhishek.testproject.model.User;
 import com.google.gson.Gson;
 import com.google.gson.internal.Streams;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,6 +16,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -46,8 +49,9 @@ public class UtilFunctions {
     }
 
 
-    public static Map<String,User> readUsersFromJson(String json){
+    public static List<User> readUsersFromJson(String json){
         Map<String,User> userMap = new HashMap<>();
+        List<User> userList = new ArrayList<>();
 
         Gson gson = new Gson();
 
@@ -61,6 +65,7 @@ public class UtilFunctions {
                 JSONObject obj = reader.getJSONObject(i);
                 User user = gson.fromJson(obj.toString(),User.class);
                 userMap.put((user.getId()),user);
+                userList.add(user);
             }
 
 
@@ -73,7 +78,7 @@ public class UtilFunctions {
 
         Log.i("testParsing","userMap :  " +userMap.get("cda99c24-955a-4c58-a6a8-c811938df530").toString());
 
-        return userMap;
+        return userList;
 
     }
 
@@ -140,4 +145,56 @@ public class UtilFunctions {
         return storyList;
 
     }
+
+
+    public static void saveUsersInSharedPreference(Object users) {
+        SharedPreferences settings;
+        SharedPreferences.Editor editor;
+        settings = Global.getInstance().getSharedPreferences(Global.getInstance().getString(R.string.sharedPreference), Context.MODE_PRIVATE);
+        editor = settings.edit();
+
+        editor.putString(Constants.KEY_USERS, jsonify(users));
+        editor.commit();
+
+    }
+
+    public static void saveStoriesInSharedPreference(Object stories) {
+        SharedPreferences settings;
+        SharedPreferences.Editor editor;
+        settings = Global.getInstance().getSharedPreferences(Global.getInstance().getString(R.string.sharedPreference), Context.MODE_PRIVATE);
+        editor = settings.edit();
+
+        editor.putString(Constants.KEY_STORIES, jsonify(stories));
+        editor.commit();
+
+    }
+
+    public static String jsonify(Object object) {
+        return new Gson().toJson(object);
+    }
+
+    public static <T> T objectify(String pJson, Type pType) {
+        if (pJson == null || pJson.trim().length() == 0) {
+            return null;
+        }
+        try {
+            return new Gson().fromJson(pJson, pType);
+        } catch (Exception ignored) {
+        }
+        return null;
+    }
+
+    public static String getData(String key) {
+        SharedPreferences settings;
+        SharedPreferences.Editor editor;
+        settings = Global.getInstance().getSharedPreferences(Global.getInstance().getString(R.string.sharedPreference), Context.MODE_PRIVATE);
+
+        return settings.getString(key, null);
+    }
+
+    public static final Type TYPE_ARRAY_LIST_STORIES = new TypeToken<ArrayList<Story>>() {
+    }.getType();
+
+    public static final Type TYPE_ARRAY_LIST_USERS = new TypeToken<ArrayList<User>>() {
+    }.getType();
 }

@@ -36,17 +36,16 @@ public class Story implements Parcelable {
     private int comment_count;
 
     public Story(Parcel in) {
-        id = in.readString();
-
         description = in.readString();
-       verb = in.readString();
-    db  =in.readString();
-       url = in.readString();
-      si = in.readString();
-      type = in.readString();
-       title = in.readString();
-       likes_count = in.readInt();
-      comment_count = in.readInt();
+        id = in.readString();
+        verb = in.readString();
+        db = in.readString();
+        url = in.readString();
+        si = in.readString();
+        type = in.readString();
+        title = in.readString();
+        likes_count = in.readInt();
+        comment_count = in.readInt();
 
         like_flag = in.readByte() != 0;
 

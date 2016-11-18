@@ -22,6 +22,8 @@ import com.abhishek.testproject.model.Story;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.abhishek.testproject.UtilFunctions.TYPE_ARRAY_LIST_STORIES;
+
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
@@ -52,7 +54,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fetchAndFillStoryData() {
-        storyList = UtilFunctions.readStoriesListFromJson(UtilFunctions.loadJSONFromAsset());
+
+        storyList = UtilFunctions.objectify
+                (UtilFunctions.getData(Constants.KEY_STORIES),
+                        TYPE_ARRAY_LIST_STORIES);
+
+        if(storyList==null) {
+            storyList = UtilFunctions.readStoriesListFromJson(UtilFunctions.loadJSONFromAsset());
+            UtilFunctions.saveStoriesInSharedPreference(storyList);
+        }
+
         mStoryAdapter.addStories(storyList);
     }
 
