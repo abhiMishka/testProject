@@ -6,17 +6,18 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.abhishek.testproject.model.Story;
 import com.abhishek.testproject.model.User;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.util.Util;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import java.util.ArrayList;
 
@@ -31,6 +32,10 @@ public class StoryDetailActivity extends AppCompatActivity implements View.OnCli
 
     private TextView userNameTv,handleTv,articleDescription;
     private FloatingActionButton followFab,likeFab;
+    ShowcaseView showcaseView;
+
+    ArrayList<User> userList;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -84,9 +89,24 @@ public class StoryDetailActivity extends AppCompatActivity implements View.OnCli
         collapsingToolbar.setTitle(story.getTitle());
 
         loadBackdrop();
+
+        if(UtilFunctions.shouldShowFavoriteInfo()){
+            showFollowTutorial();
+        }
+
     }
 
-    ArrayList<User> userList;
+    private void showFollowTutorial() {
+        showcaseView = new ShowcaseView.Builder(this)
+                .setTarget(new ViewTarget(R.id.followFab, this))
+                .setContentTitle("Favorite")
+                .setContentText("Click here to mark favorite!")
+                .hideOnTouchOutside()
+                .build();
+
+        showcaseView.forceTextPosition(ShowcaseView.ABOVE_SHOWCASE);
+    }
+
 
     private void fetchUserData() {
 
@@ -130,6 +150,9 @@ public class StoryDetailActivity extends AppCompatActivity implements View.OnCli
         switch (v.getId()) {
 
             case R.id.followFab:
+                if(showcaseView!=null){
+                    showcaseView.hide();
+                }
                 if(user.isIs_following()){
                     updateUserValueAndSave(false);
                     followFab.setImageResource(R.drawable.ic_star_border_white);

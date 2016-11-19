@@ -10,6 +10,7 @@ public class Constants {
 
     public static final String KEY_USERS = "key.users";
     public static final String KEY_STORIES = "key.stories";
+    public static final String KEY_APP_OPENED = "key.appOpened";
 
 
 }
