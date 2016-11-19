@@ -1,5 +1,6 @@
 package com.abhishek.testproject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -12,9 +13,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.abhishek.testproject.model.Story;
+import com.abhishek.testproject.model.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.abhishek.testproject.UtilFunctions.TYPE_ARRAY_LIST_STORIES;
 
@@ -24,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private StoryAdapter mStoryAdapter;
     Toolbar toolbar;
     RecyclerView mRecyclerView;
+    Map<String,User> userMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initViews();
+        fetchAndFillStoryData();
+
 
 
     }
@@ -41,26 +48,21 @@ public class MainActivity extends AppCompatActivity {
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
-        mStoryAdapter= new StoryAdapter(storyList);
+        mStoryAdapter= new StoryAdapter(storyList,this);
 
-        mRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setAdapter(mStoryAdapter);
     }
 
     private void fetchAndFillStoryData() {
 
-        Log.i("testSomething","here");
+
         storyList = UtilFunctions.objectify
                 (UtilFunctions.getData(Constants.KEY_STORIES),
                         TYPE_ARRAY_LIST_STORIES);
 
         if(storyList==null) {
-            Log.i("testSomething","reading from json");
-
             storyList = UtilFunctions.readStoriesListFromJson(UtilFunctions.loadJSONFromAsset());
             UtilFunctions.saveStoriesInSharedPreference(storyList);
         }
@@ -69,16 +71,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == Constants.REQUEST_CODE) {
+            mStoryAdapter.onActivityResult(requestCode, resultCode, data);
+        }
     }
+
 
     @Override
     protected void onResume() {
         super.onResume();
-        fetchAndFillStoryData();
     }
 
     @Override

@@ -7,9 +7,11 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.Layout;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,7 +38,11 @@ public class StoryDetailActivity extends AppCompatActivity implements View.OnCli
     ShowcaseView showcaseView;
 
     ArrayList<User> userList;
+    private TextView visitPage;
 
+    public interface storyUpdateCallBack{
+        public void onStoryUpdate();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,6 +52,14 @@ public class StoryDetailActivity extends AppCompatActivity implements View.OnCli
         userNameTv = (TextView) findViewById(R.id.userNameTv);
         handleTv = (TextView) findViewById(R.id.userHandleTv);
         articleDescription = (TextView) findViewById(R.id.articleDescriptionTv);
+        visitPage = (TextView) findViewById(R.id.visitPageTv);
+
+
+        visitPage.setClickable(true);
+        visitPage.setMovementMethod(LinkMovementMethod.getInstance());
+
+        userNameTv.setClickable(true);
+        userNameTv.setMovementMethod(LinkMovementMethod.getInstance());
 
         followFab = (FloatingActionButton) findViewById(R.id.followFab);
         likeFab = (FloatingActionButton) findViewById(R.id.likeFab);
@@ -55,9 +69,14 @@ public class StoryDetailActivity extends AppCompatActivity implements View.OnCli
 
         fetchUserData();
 
-        userNameTv.setText(user.getUsername());
-        handleTv.setText(user.getHandle());
+        String descriptionTextWithLink = "<a href='" +story.getUrl() +"'> " +"visit page" +" </a>";
+        String userNameTextWithLink = "<a href='" +user.getUrl() +"'> " +user.getUsername() +" </a>";
+
+
+        userNameTv.setText(Html.fromHtml(userNameTextWithLink));
         articleDescription.setText(story.getDescription());
+        visitPage.setText(Html.fromHtml(descriptionTextWithLink));
+        handleTv.setText(user.getHandle());
 
         followFab.setOnClickListener(this);
         likeFab.setOnClickListener(this);
@@ -95,6 +114,16 @@ public class StoryDetailActivity extends AppCompatActivity implements View.OnCli
             showFollowTutorial();
         }
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onPressingBack();
+                break;
+        }
+        return true;
     }
 
     private void showFollowTutorial() {
@@ -146,6 +175,8 @@ public class StoryDetailActivity extends AppCompatActivity implements View.OnCli
         return true;
     }
 
+
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -193,11 +224,7 @@ public class StoryDetailActivity extends AppCompatActivity implements View.OnCli
         for(Story st : storyList){
 
             if(st.getId().equals(story.getId())){
-                Log.i("testEqual","updating like flag" +storyList.get(count).getDescription());
                 storyList.get(count).setLike_flag(b);
-
-                Log.i("testEqual","like flag" +storyList.get(count).toString());
-
                 break;
             }
             count++;
@@ -210,8 +237,17 @@ public class StoryDetailActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onBackPressed() {
+
+        onPressingBack();
+        //NavUtils.navigateUpFromSameTask(this);
+    }
+
+    private void onPressingBack() {
+        Intent intent=new Intent();
+        intent.putExtra(Global.getInstance().getString(R.string.obj),story);
+        setResult(12,intent);
+        finish();
         super.onBackPressed();
-        NavUtils.navigateUpFromSameTask(this);
     }
 
     private void updateUserValueAndSave(boolean b) {

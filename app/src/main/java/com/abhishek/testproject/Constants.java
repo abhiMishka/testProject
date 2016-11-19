@@ -13,4 +13,5 @@ public class Constants {
     public static final String KEY_APP_OPENED = "key.appOpened";
 
 
+    public static final int REQUEST_CODE = 12;
 }

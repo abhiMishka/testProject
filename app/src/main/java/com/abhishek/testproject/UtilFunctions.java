@@ -1,7 +1,9 @@
 package com.abhishek.testproject;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.util.Log;
 
 import com.abhishek.testproject.model.Story;
@@ -131,6 +133,33 @@ public class UtilFunctions {
 
     }
 
+    public static Map<String,User> getUsersMapFromJson(String json) {
+
+        Map<String,User> userMap = new HashMap<>();
+        Gson gson = new Gson();
+
+
+        try {
+            JSONArray reader = new JSONArray(json);
+
+            int length = reader.length();
+
+            for (int i = 0; i < 2; i++) {
+                JSONObject obj = reader.getJSONObject(i);
+                User user = gson.fromJson(obj.toString(), User.class);
+                userMap.put(user.getId(),user);
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        return userMap;
+
+    }
+
 
     public static void saveUsersInSharedPreference(Object users) {
         SharedPreferences.Editor editor = getEditor();
@@ -198,5 +227,13 @@ public class UtilFunctions {
         }
 
         return false;
+    }
+
+    public static void openBrowser(String url){
+        if (!url.startsWith("http://") && !url.startsWith("https://"))
+            url = "http://" + url;
+
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        Global.getInstance().startActivity(browserIntent);
     }
 }
