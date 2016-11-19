@@ -144,7 +144,7 @@ public class UtilFunctions {
         SharedPreferences.Editor editor = getEditor();
 
         editor.putString(Constants.KEY_STORIES, jsonify(stories));
-        editor.commit();
+        editor.apply();
 
     }
 

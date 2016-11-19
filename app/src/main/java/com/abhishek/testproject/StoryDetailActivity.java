@@ -3,6 +3,7 @@ package com.abhishek.testproject;
 import android.content.Intent;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -190,16 +191,27 @@ public class StoryDetailActivity extends AppCompatActivity implements View.OnCli
                         TYPE_ARRAY_LIST_STORIES);
         int count = 0;
         for(Story st : storyList){
-            Log.i("testEqual","st.getDv  " +st.getDescription() +
-            "  ,  storyLISt.getDb : " +storyList.get(count).getDescription());
+
             if(st.getId().equals(story.getId())){
+                Log.i("testEqual","updating like flag" +storyList.get(count).getDescription());
                 storyList.get(count).setLike_flag(b);
-                UtilFunctions.saveStoriesInSharedPreference(storyList);
+
+                Log.i("testEqual","like flag" +storyList.get(count).toString());
+
                 break;
             }
             count++;
         }
 
+        UtilFunctions.saveStoriesInSharedPreference(storyList);
+
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        NavUtils.navigateUpFromSameTask(this);
     }
 
     private void updateUserValueAndSave(boolean b) {

@@ -7,6 +7,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initViews();
-        fetchAndFillStoryData();
+
 
     }
 
@@ -52,11 +53,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void fetchAndFillStoryData() {
 
+        Log.i("testSomething","here");
         storyList = UtilFunctions.objectify
                 (UtilFunctions.getData(Constants.KEY_STORIES),
                         TYPE_ARRAY_LIST_STORIES);
 
         if(storyList==null) {
+            Log.i("testSomething","reading from json");
+
             storyList = UtilFunctions.readStoriesListFromJson(UtilFunctions.loadJSONFromAsset());
             UtilFunctions.saveStoriesInSharedPreference(storyList);
         }
@@ -69,6 +73,12 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchAndFillStoryData();
     }
 
     @Override
